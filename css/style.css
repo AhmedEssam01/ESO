@@ -7,12 +7,21 @@
   --gray: #374151;
 }
 
+/* Make sure box model is predictable and prevent horizontal scroll */
+html, body {
+  box-sizing: border-box;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
 body {
   background-color: var(--dark);
   color: var(--light);
   font-family: "Poppins", sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
-  overflow-x: hidden;
   position: relative;
   min-height: 100vh;
 }
@@ -252,6 +261,40 @@ body {
   pointer-events: none;
 }
 
+/* GLOBAL IMAGE / MEDIA SAFETY: ensure images and media don't cause overflow */
+img, svg, video, iframe {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Allow pre/code to wrap on small screens to avoid forced horizontal scroll */
+pre, code {
+  white-space: pre-wrap; /* allow wrapping */
+  white-space: -moz-pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
+/* Ensure main content and page sections do not produce overflow */
+.main-content-area, .page {
+  overflow-x: hidden;
+}
+
+/* Hide large decorative blurred circles on small screens to prevent overflow */
+@media (max-width: 640px) {
+  .bg-primary.rounded-full.filter.blur-3xl,
+  .bg-primary.rounded-full.filter.blur-xl,
+  .bg-primary.rounded-full.filter.blur-2xl {
+    display: none !important;
+  }
+  /* Reduce large negative offsets that can produce overflow */
+  .-right-20 { right: 0 !important; }
+  .-left-20 { left: 0 !important; }
+}
+
 /* Light mode styles */
 body.light-mode {
   --dark: #f5f5f5;
@@ -272,9 +315,7 @@ body.light-mode .navbar {
   background-color: rgba(255, 255, 255, 0.8);
 }
 
-body.light-mode .logo-text {
-  /* Gradient might need adjustment or fallback for light mode */
-}
+/* If logo gradient needs adjustments for light mode, add them here */
 
 body.light-mode .nav-link {
   color: var(--light);
